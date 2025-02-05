@@ -1,6 +1,6 @@
 import React from 'react';
 import "../index.css";
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 const quizQuestions = [
@@ -19,7 +19,7 @@ const quizQuestions = [
             {text: "Pastries or sweet treats!", type:"A"},
             {text: "Eggs, Bacon, or toast... The works!", type: "B"},
             {text: "Fruit or nuts", type: "C"},
-            {text: "Just my coffee:) Maybe a granola bar at the bottom of my bag...", type: "D"}
+            {text: "Just my coffee! Maybe a granola bar at the bottom of my bag...", type: "D"}
         ]
     },
     { 
@@ -43,8 +43,8 @@ const quizQuestions = [
     {
         question: "Do you often order the same coffee or do you like to try new things?",
         options: [
-            {text: "I like to try new things everyday!", type: "A" || "D"},
-            {text: "I tend to stick with my favorites.", type: "B" || "C"}
+            {text: "I like to try new things everyday!", type: ["A", "D"]},
+            {text: "I tend to stick with my favorites.", type: ["B", "C"]}
         ]
     }
 ];
@@ -60,34 +60,42 @@ const Quiz = () => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState({A:0, B:0, C:0, D:0});
     const [showresults, setShowresults] = useState(false);
-    const [result, setResult] = useState('');
+    const [topChoice, setTopChoice] = useState('');
+    const navigate = useNavigate();
 
     const handleAnswer = (type) => {
-        setAnswers({...answers, [type]: answers[type] +1});
+        setAnswers(prevAnswers => ({...prevAnswers, [type]: prevAnswers[type] + 1 }));
 
         const nextQuestion = currentQuestion +1;
         if(nextQuestion < quizQuestions.length) {
-            setCurrentQuestions(nextQuestion);
+            setCurrentQuestion(nextQuestion);
         } else {
             setShowresults(true);
-            const sortedAnswers = Object.entries(answers).sory((a,b) => b[1]);
-            setTopChoice(results[sortedAnswers[0][0]]);
-
-            localStorage.setItem('coffeeMatch', topChoice);
-
-            navigate ('/favorites');
         }
     };
 
+    useEffect(() => {
+        if(showresults) {
+            const sortedAnswers = Object.entries(answers).sort((a,b) => b[1]);
+            const mostChosen = results[sortedAnswers[0][0]];
+            setTopChoice(mostChosen);
+
+            localStorage.setItem('coffeeMatch', mostChosen);
+            navigate ('/favorites');
+        }
+    },[showresults, answers, navigate]);
+
+   
+
     return (
         <div className="quiz-container">
-            {showresults ?(
+            {showresults ? (
                 <h2>Your coffee match is: {topChoice}</h2>
             ) : (
                 <>
                 <h3>{quizQuestions[currentQuestion].question}</h3>
                 {quizQuestions[currentQuestion].options.map((option) => (
-                    <button key={option-text} onClick={() => handleAnswer(option.type)}>
+                    <button key={option.text} onClick={() => handleAnswer(option.type)}>
                         {option.text}
                     </button>
                 ))}
