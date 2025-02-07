@@ -5,17 +5,64 @@ import {useState, useEffect} from 'react';
 
 const favorites = () => {
     const [coffeeMatch, setCoffeeMatch] = useState(' ');
+    const [recipes, setRecipes] = useState([]);
+    const[shops, setShops] = useState([]);
 
     useEffect(() => {
         const savedMatch = localStorage.getItem('coffeeMatch');
         if (savedMatch) {
             setCoffeeMatch(savedMatch);
         }
+
+        const savedRecipes =JSON.parse(localStorage.getItem('recipes')) || [];
+        const savedShops = JSON.parse(localStorage.getItem('shops')) || [];
+        setRecipes(savedRecipes);
+        setShops(savedShops);
     }, []);
 
-    return (
+const newRecipe = () => {
+    const name = prompt('What is the name of the drink?')
+    if(!name) return;
+
+    const shots = prompt('How many shots of espresso go in this drink?')
+    if(!shots) return;
+
+    const ingredients = prompt('What syrups, flavors, milk, and any added ingredients are in this drink?')
+    if(!ingredients) return;
+
+    const temperature = prompt('Is this drink iced or hot?')
+    if(!temperature) return;
+
+    const newDrink = {name, shots, ingredients, temperature};
+
+    const updatedRecipes = [...recipes, newDrink];
+    setRecipes(updatedRecipes);
+    localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+    }
+
+
+const saveShop = () => {
+    const name = prompt ('What is the name of the shop?');
+
+    if (name) {
+        const updatedShops =[...shops, name];
+        localStorage.setItem('shops', JSON.stringify(updatedShops));
+    }
+};
+
+const deleteDrinkorShop = () => {
+    const toDelete = prompt ('Enter name of the drink or shop you want to delete');
+
+    if(!toDelete) return;
+
+    const updatedRecipe = recipes.filter(drink => drink.name !== toDelete);
+    const updatedShops = shops.filter(shop => shop !== toDelete);
+};
+
+
+return (
         <div>
-            <h1>I 💗 these Drinks and Shops</h1>
+            <h1>₊✩‧˚₊✩‧ ⋆ ˚｡Favorites𖦹 ⋆｡°✮ ⋆ ˚｡𖦹 ⋆｡°✩</h1>
             <p>Click the + to add a new recipe</p>
             <p>Click the 💗 to save a shop</p>
             <p>Click the 🗑️ to delete drinks or shops</p>
@@ -26,6 +73,9 @@ const favorites = () => {
         <h2>Quiz Match: {coffeeMatch}</h2>
     </div>
             )}
+            <button onClick={newRecipe}>+</button>
+            <button onClick={saveShop}>💗</button>
+            <button onClick={deleteDrinkorShop}>🗑️</button>
     <ul>
    
             <Link to='/quiz'>Haven't taken our quiz yet? Click me!💌</Link>
