@@ -2,6 +2,10 @@ import React from 'react';
 import "../index.css";
 import { useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
+import americano from '../assets/americano.png';
+import caramel from '../assets/caramel-macc.png';
+
+
 
 const quizQuestions = [
     {
@@ -76,12 +80,11 @@ const Quiz = () => {
 
     useEffect(() => {
         if(showresults) {
-            const sortedAnswers = Object.entries(answers).sort((a,b) => b[1]);
+            const sortedAnswers = Object.entries(answers).sort((a,b) => b[1] - a[1]);
             const mostChosen = results[sortedAnswers[0][0]];
             setTopChoice(mostChosen);
 
             localStorage.setItem('coffeeMatch', mostChosen);
-            navigate ('/favorites');
         }
     },[showresults, answers, navigate]);
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../index.css';
-import jwt from 'jsonwebtoken';
+import { jwtDecode } from 'jwt-decode';
 
 
 const profile = () => {
@@ -13,7 +13,7 @@ const profile = () => {
 
     if (token) {
       try {
-      const decoded = jwt.decode(token);
+      const decoded = jwtDecode(token);
       setUsername(decoded?.username || 'Guest');
     } catch (error){
       console.error('Error decoding token', error);
@@ -29,13 +29,13 @@ setShops(savedShops);
 return (
   <div>
     <h1>Welcome,{username}</h1>
-    
+
     <p>⊹₊⟡⋆ Loved Drinks ⊹₊⟡⋆</p>
     <ul>
       {recipes.length > 0 ? (
         recipes.map((drink, index) => (
           <li key={index}>
-            <strong>drink.name</strong> - {drink.shots} shots, {drink.ingredients}, {drink.temperature}
+            <strong>{drink.name}</strong> - {drink.shots} shots, {drink.ingredients}, {drink.temperature}
           </li>
         ))
       ) :(
