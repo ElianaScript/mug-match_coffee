@@ -12,6 +12,9 @@ const __dirname = path.dirname(__filename);
 // Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+// Access Google API key securely
+const googleApiKey = process.env.GOOGLE_API_KEY;
+
 // Debug: Print the loaded DATABASE_URL
 console.log("DEBUG: Loaded DATABASE_URL ->", process.env.DATABASE_URL);
 
