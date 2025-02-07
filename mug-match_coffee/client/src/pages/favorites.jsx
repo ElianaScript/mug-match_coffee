@@ -34,8 +34,8 @@ const newRecipe = () => {
     if(!temperature) return;
 
     const newDrink = {name, shots, ingredients, temperature};
-
     const updatedRecipes = [...recipes, newDrink];
+
     setRecipes(updatedRecipes);
     localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
     }
@@ -43,26 +43,31 @@ const newRecipe = () => {
 
 const saveShop = () => {
     const name = prompt ('What is the name of the shop?');
+    if(!name) return;
 
-    if (name) {
-        const updatedShops =[...shops, name];
-        localStorage.setItem('shops', JSON.stringify(updatedShops));
-    }
+    const updatedShops =[...shops, name];
+    setShops(updatedShops);
+    localStorage.setItem('shops',JSON.stringify(updatedShops));
 };
 
 const deleteDrinkorShop = () => {
     const toDelete = prompt ('Enter name of the drink or shop you want to delete');
-
     if(!toDelete) return;
 
-    const updatedRecipe = recipes.filter(drink => drink.name !== toDelete);
+    const updatedRecipes = recipes.filter(drink => drink.name !== toDelete);
     const updatedShops = shops.filter(shop => shop !== toDelete);
+
+    setRecipes(updatedRecipe);
+    setShops(updatedShops);
+
+    localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+    localStorage.setItem('shops', JSON.stringify(updatedShops));
 };
 
 
 return (
         <div>
-            <h1>₊✩‧˚₊✩‧ ⋆ ˚｡Favorites𖦹 ⋆｡°✮ ⋆ ˚｡𖦹 ⋆｡°✩</h1>
+            <h1>₊✩‧˚₊✩‧ ⋆ ˚｡Add Favorites𖦹 ⋆｡°✮ ⋆ ˚｡𖦹 ⋆｡°✩</h1>
             <p>Click the + to add a new recipe</p>
             <p>Click the 💗 to save a shop</p>
             <p>Click the 🗑️ to delete drinks or shops</p>
