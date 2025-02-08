@@ -4,6 +4,7 @@ import '../index.css';
 const home = () => {
     return (
         <div>
+            <h1>-`✮´- Coffee of the day -`✮´- </h1>
         </div>
     )
 }
