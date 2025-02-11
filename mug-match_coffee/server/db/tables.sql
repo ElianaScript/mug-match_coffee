@@ -20,3 +20,12 @@ CREATE TABLE preference (
     temperature VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES profile(user_id)
 );
+
+CREATE TABLE coffee_id (
+    coffee_id SERIAL PRIMARY KEY,
+    name VARCHAR (100) NOT NULL,
+    description TEXT,
+    origin varchar(100),
+    roast_level VARCHAR(50),
+    caffeine_content VARCHAR(50)
+);
