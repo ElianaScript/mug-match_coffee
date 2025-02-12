@@ -1,8 +1,8 @@
 CREATE TABLE profile (
     user_id SERIAL PRIMARY KEY,
-    email VARCHAR(255),
-    username VARCHAR(50),
-    password VARCHAR(50)
+    email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE shops (
@@ -28,4 +28,13 @@ CREATE TABLE coffee_id (
     origin varchar(100),
     roast_level VARCHAR(50),
     caffeine_content VARCHAR(50)
+);
+
+CREATE TABLE login_sessions (
+    session_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    jwt_token TEXT UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    expires_at TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES profile(user_id) ON DELETE CASCADE
 );
