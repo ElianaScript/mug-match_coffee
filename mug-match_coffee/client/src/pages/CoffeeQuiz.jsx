@@ -52,10 +52,21 @@ const CoffeeQuiz = () => {
     useEffect(() => {
         if (showResults) {
             const sortedAnswers = Object.entries(answers).sort((a, b) => b[1] - a[1]);
-            const mostChosen = results[sortedAnswers[0][0]];
-            setTopChoice(mostChosen);
-            localStorage.setItem('coffeeMatch', mostChosen);
-            navigate('/favorites');
+
+            fetch('http://localhost:5000/api/quiz/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ user_id: localStorage.getItem('user_id'), answers })
+            })
+            .then(response => response.json())
+            .then(data =>{
+                setTopChoice(data.coffeeMatch || results[sortedAnswers[0][0]]);
+                navigate('/favorites');
+            })
+            .catch(error => console.error('Error submitting quiz', error));
         }
     }, [showResults, answers, navigate]);
 
