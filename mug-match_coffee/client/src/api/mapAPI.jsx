@@ -10,7 +10,7 @@ const retrievePlaces = async () => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${VITE_TOKEN}`
             },
         });
         
@@ -37,7 +37,7 @@ const searchCafes = async () => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${VITE_TOKEN}`
             },
         });
 
@@ -63,7 +63,7 @@ const postCafes = async (cafeData) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${tVITE_TOKEN}`
             },
             body: JSON.stringify(cafeData || {}),
         });

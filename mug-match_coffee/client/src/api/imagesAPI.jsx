@@ -1,8 +1,8 @@
-import Auth from '../../../client/src/utils/auth';
+import Auth from '../utils/auth';
 
 const API_URL = '/api/coffeePics';
 
-export const retrieveCoffeePics = async () => {
+const retrieveCoffeePics = async () => {
     try {
         const response = await fetch (
             '/api/coffeePics',
@@ -25,7 +25,7 @@ export const retrieveCoffeePics = async () => {
     }
 };
 
-export const postImage = async (body) => {
+const postImage = async (body) => {
     try {
         const response = await fetch(
             'api/coffeePics', {

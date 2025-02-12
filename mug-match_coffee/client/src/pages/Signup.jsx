@@ -1,3 +1,4 @@
+import GradientBackground from "../components/GradientBackground";
 const Signup = () => {
     return (
       <GradientBackground>
