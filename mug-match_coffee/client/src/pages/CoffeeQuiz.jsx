@@ -15,6 +15,31 @@ const quizQuestions = [
         ]
     },
     {
+    question: "How do you like your coffee brewed?",
+    options: [
+    {text: "Espresso - I love a good latte or cappucino", type: "A"},
+    {text: "Drip - I like my coffee from a pot or a Keurig", type: "B"},
+    {text: "French Press - I like my coffee strong and full of fun flavors!", type: "C"},
+    {text: "Brewed Iced Coffee or Cold Brew - I like my coffee cold and refreshing", type: "D"}
+    ]
+},
+{
+    question: "How much coffee do you need to function?",
+    options: [
+    {text: "I need at least one cup of coffee to start my day", type: "A"},
+    {text: "Coffee is my lifeblood, I cannot survive without it", type: "B"},
+    {text: "Around 3 max cups of coffee a day for me", type: "C"},
+    {text: "I can get by without any coffee, it's just a nice treat", type: "D"}
+]
+},
+{
+    question: "Do you often order the same coffee or do you like to try new things?",
+    options: [
+        {text: "I like to try new things everyday!", type: ["A", "D"]},
+        {text: "I tend to stick with my favorites.", type: ["B", "C"]}
+    ]
+},
+    {
         question: "What do you pair with your coffee in the morning?",
         options: [
             { text: "Pastries or sweet treats!", type: "A" },
@@ -22,8 +47,8 @@ const quizQuestions = [
             { text: "Fruit or nuts", type: "C" },
             { text: "Just my coffee! Maybe a granola bar at the bottom of my bag...", type: "D" }
         ]
-    },
-];
+    }
+]
 
 const results = {
     A: "Caramel Macchiato - Sweet and creamy with hints of vanilla and caramel.",
