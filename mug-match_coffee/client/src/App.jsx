@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/LandingPage';
 import Favorites from './pages/Favorites copy';
 import CoffeeShops from './pages/CoffeeShops copy';
-import Profile from './pages/ProfileSettings';
-import Quiz from './pages/CoffeeQuiz';
+import Settings from './pages/ProfileSettings';
+import CoffeeQuiz from './pages/CoffeeQuiz';
 import Navbar from './components/navbar';
 import './index.css';
 
