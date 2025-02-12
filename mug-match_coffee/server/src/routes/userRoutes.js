@@ -1,8 +1,8 @@
 const express = require ('express');
-const { signUp, login, getProfile, updateProfile } = require ('../controllers/userController.js');
+const { signup, login, getProfile, updateProfile } = require ('../controllers/userController.js');
 const router = express.Router();
 
-router.post('/signUp', signUp);
+router.post('/signup', signup);
 router.post('/login', login);
 router.get('/profile', getProfile);
 router.put('/updateProfile', updateProfile);
