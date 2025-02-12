@@ -1,4 +1,4 @@
-import Auth from '../../client/src/utils/auth';
+import Auth from '../../../client/src/utils/auth';
 
 const API_URL = '/api/coffeePics';
 
