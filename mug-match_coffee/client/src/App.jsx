@@ -9,8 +9,8 @@ import CoffeeQuiz from './pages/CoffeeQuiz';
 import Navbar from './components/navbar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
-import mapComponent from './components/mapComponent';
-import Coffee from './components/coffeeComponent';
+import Map from './components/mapComponent';
+import Fact from './components/factComponent';
 import './index.css';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
       <Navbar />
     <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/coffee' element={<Coffee />} />
+            <Route path='/fact' element={<Fact />} />
             <Route path="/landingpage" element={<LandingPage />} />
             <Route path='/favorites' element={<Favorites />} />
             <Route path='/settings' element={<Settings />} />

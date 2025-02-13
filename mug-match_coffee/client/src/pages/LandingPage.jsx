@@ -2,48 +2,41 @@ import React, { useState, useEffect } from 'react';
 import GradientBackground from '../components/GradientBackground';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
-import { retrieveCoffeePics }from '../api/imagesAPI'; 
-
+import { retrieveCatFacts } from '../api/catAPI'; 
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [coffeePics, setCoffeePics] = useState([]);
+  const [catFact, setCatFact] = useState(""); 
 
   useEffect(() => {
-    const fetchCoffeePics = async () => {
+    const fetchCatFact = async () => {
       try {
-        const data = await retrieveCoffeePics();
-        setCoffeePics(data);
+        const fact = await retrieveCatFacts();
+        setCatFact(fact);
       } catch (error) {
-        console.error('Error fetching coffee images:', error);
+        console.error("Error fetching cat fact:", error);
       }
     };
 
-    fetchCoffeePics();
+    fetchCatFact();
   }, []);
 
   return (
     <GradientBackground>
       <div className="flex justify-center mt-6 space-x-6">
-        {coffeePics && coffeePics.length > 0 ? (
-          coffeePics.map((pic, index) => (
-            <img
-              key={index}
-              src={pic.file}
-              alt={`Coffee ${index + 1}`}
-              className="w-40 h-40 object-cover rounded-lg shadow-lg"
-            />
-          ))
-        ) : (
-          <p className="text-white text-center">`✮´- Coffee of the day -`✮´- </p>
-        )}
+        <p className="text-white text-center text-lg">✮ Cat Fact of the Day ✮</p>
+      </div>
+
+      <div className="flex justify-center mt-3">
+        <p className="text-white text-center max-w-md italic">
+          {catFact || "Fetching a fun cat fact..."}
+        </p>
       </div>
 
       <div className="flex justify-center mt-6 space-x-6">
         <Button text="Sign Up" onClick={() => navigate('/signup')} />
         <Button text="Log In" onClick={() => navigate('/login')} />
       </div>
-
     </GradientBackground>
   );
 };

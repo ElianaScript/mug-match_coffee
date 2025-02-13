@@ -1,37 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import GradientBackground from '../components/GradientBackground';
-import Button from '../components/Button';
-import { useNavigate } from 'react-router-dom';
-import { retrievePlaces } from '../api/mapAPI';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import '../index.css';
+import React, { useState, useEffect } from "react";
+import GradientBackground from "../components/GradientBackground";
+import { useNavigate } from "react-router-dom";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { fetchPlacesData } from "../api/mapAPI"; 
+import "../index.css";
 
 const CoffeeShops = () => {
     const navigate = useNavigate();
     const [places, setPlaces] = useState([]);
     const [mapLoaded, setMapLoaded] = useState(false);
+    const apiURL = import.meta.env.VITE_GOOGLE_MAP_API_KEY; 
 
     useEffect(() => {
-        const fetchPlaces = async () => {
+        const fetchNearbyPlaces = async (retryCount = 0) => {
             try {
-                const data = await retrievePlaces();
-                if (data) {
-                    setPlaces(data); 
-                } else {
-                    console.warn("No places data retrieved.");
-                }
+                const response = await fetch(apiURL);
+                if (!response.ok) throw new Error("Failed to fetch");
+
+                const data = await response.json();
+                setPlaces(data);
             } catch (error) {
-                console.error('Error fetching places:', error);
+                console.error("Error fetching places:", error);
+                
+                
+                if (retryCount < 3) {
+                    setTimeout(() => fetchNearbyPlaces(retryCount + 1), 1000);
+                } else {
+                    console.error("Max retries reached.");
+                }
             }
         };
-        fetchPlaces();
+
+        fetchNearbyPlaces();
     }, []);
 
     const handleSearchCafes = async () => {
         try {
-            const data = await searchCafes();
+            const data = await fetchPlacesData();
             if (data) {
-                setPlaces(data); 
+                setPlaces(data);
             } else {
                 console.warn("No cafes found.");
             }
@@ -46,9 +53,9 @@ const CoffeeShops = () => {
                 name: "New Coffee Spot",
                 location: "Unknown",
             };
-            const response = await postCafes(newCafe);
+            const response = await fetchPlacesData(newCafe); 
             if (response) {
-                setPlaces((prevPlaces) => [...prevPlaces, response]); 
+                setPlaces((prevPlaces) => [...prevPlaces, response]);
             }
         } catch (error) {
             console.error("Error posting a new cafe:", error);
@@ -56,8 +63,8 @@ const CoffeeShops = () => {
     };
 
     const containerStyle = {
-        width: '100%',
-        height: '400px',
+        width: "100%",
+        height: "400px",
     };
 
     const center = {
@@ -67,9 +74,11 @@ const CoffeeShops = () => {
 
     return (
         <GradientBackground>
-            <h1 className="text-center text-2xl font-bold my-4">Coffee Shops to Try!</h1>
+            <h1 className="text-center text-2xl font-bold my-4">
+                Coffee Shops to Try!
+            </h1>
 
-            {places && places.length > 0 ? (
+            {places.length > 0 ? (
                 <ul className="text-center">
                     {places.map((place, index) => (
                         <li key={index} className="my-2 p-2 border-b">
@@ -78,28 +87,27 @@ const CoffeeShops = () => {
                     ))}
                 </ul>
             ) : (
-                <p className="text-center text-gray-500"></p>
+                <p className="text-center text-gray-500">No coffee shops found.</p>
             )}
 
-            <LoadScript googleMapsApiKey={import.meta.env.VITE_TOKEN}>
+            <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAP_API_KEY}>
                 <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={center}
-                zoom={12}
-                onLoad={() => setMapLoaded(true)}
+                    mapContainerStyle={containerStyle}
+                    center={center}
+                    zoom={12}
+                    onLoad={() => setMapLoaded(true)}
                 >
-
-                {places.map((place, index) => (   
-                <Marker
-                key={index}
-                position={{
-                    lat: places.latitude ||center.lat,
-                    lng: places.longitude || center.lng,
-                }}
-                label={places.name}
-                />
-            ))}
-              </GoogleMap>
+                    {places.map((place, index) => (
+                        <Marker
+                            key={index}
+                            position={{
+                                lat: place.latitude || center.lat,
+                                lng: place.longitude || center.lng,
+                            }}
+                            label={place.name}
+                        />
+                    ))}
+                </GoogleMap>
             </LoadScript>
         </GradientBackground>
     );
