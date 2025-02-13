@@ -1,14 +1,17 @@
 const Auth = {
     login: (token) => {
-        localStorage.setItem('id_token', token);
+      console.log('Token recieved in login:', token);
+      localStorage.setItem('id_token', token);
     },
 
     getToken: () => {
-        return localStorage.getItem('id_item');
+        const token = localStorage.getItem('id_token');
+        console.log('Token recieved from localStorage', token);
+        return token;
     },
 
     isLoggedIN: () => {
-        return !!localStorage.getItem
+        return !!localStorage.getItem('id_token');
     },
 
     logout: () => {

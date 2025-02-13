@@ -3,18 +3,23 @@ import GradientBackground from '../components/GradientBackground';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { retrievePlaces, searchCafes, postCafes } from '../api/mapAPI';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import '../index.css';
-
 
 const CoffeeShops = () => {
     const navigate = useNavigate();
     const [places, setPlaces] = useState([]);
+    const [mapLoaded, setMapLoaded] = useState(false);
 
     useEffect(() => {
         const fetchPlaces = async () => {
             try {
                 const data = await retrievePlaces();
-                setPlaces(data); 
+                if (data) {
+                    setPlaces(data); 
+                } else {
+                    console.warn("No places data retrieved.");
+                }
             } catch (error) {
                 console.error('Error fetching places:', error);
             }
@@ -22,11 +27,49 @@ const CoffeeShops = () => {
         fetchPlaces();
     }, []);
 
+    const handleSearchCafes = async () => {
+        try {
+            const data = await searchCafes();
+            if (data) {
+                setPlaces(data); 
+            } else {
+                console.warn("No cafes found.");
+            }
+        } catch (error) {
+            console.error("Error searching cafes:", error);
+        }
+    };
+
+    const handlePostCafes = async () => {
+        try {
+            const newCafe = {
+                name: "New Coffee Spot",
+                location: "Unknown",
+            };
+            const response = await postCafes(newCafe);
+            if (response) {
+                setPlaces((prevPlaces) => [...prevPlaces, response]); 
+            }
+        } catch (error) {
+            console.error("Error posting a new cafe:", error);
+        }
+    };
+
+    const containerStyle = {
+        width: '100%',
+        height: '400px',
+    };
+
+    const center = {
+        lat: 35.021534,
+        lng: -80.688171,
+    };
+
     return (
         <GradientBackground>
             <h1 className="text-center text-2xl font-bold my-4">Coffee Shops to Try!</h1>
 
-            {places.length > 0 ? (
+            {places && places.length > 0 ? (
                 <ul className="text-center">
                     {places.map((place, index) => (
                         <li key={index} className="my-2 p-2 border-b">
@@ -38,10 +81,26 @@ const CoffeeShops = () => {
                 <p className="text-center text-gray-500">Loading coffee shops...</p>
             )}
 
-            <div className="flex justify-center mt-6">
-                <Button text="Search Cafés" onClick={() => searchCafes()} />
-                <Button text="Post a Café" onClick={() => postCafes()} />
-            </div>
+            <LoadScript googleMapsApiKey={import.meta.env.VITE_TOKEN}>
+                <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={12}
+                onLoad={() => setMapLoaded(true)}
+                >
+
+                {places.map((place, index) => (   
+                <Marker
+                key={index}
+                position={{
+                    lat: places.latitude ||center.lat,
+                    lng: places.longitude || center.lng,
+                }}
+                label={places.name}
+                />
+            ))}
+              </GoogleMap>
+            </LoadScript>
         </GradientBackground>
     );
 };

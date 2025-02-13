@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const Auth = require('../utils/auth');
+require('dotenv').config(); 
 
 const retrievePlaces = async (req, res) => {
     try {
@@ -8,11 +9,19 @@ const retrievePlaces = async (req, res) => {
             return res.status(401).json({ error: 'No authentication token found' });
         }
 
-        const response = await fetch ('https://map.googleapis.com/maps/api/place/nearbysearch/json?location=latitude,longitude&radius=5000&type=cafe&key=API_KEY_HERE');
+       
+        const { latitude, longitude } = req.query;
+        if (!latitude || !longitude) {
+            return res.status(400).json({ error: 'Latitude and longitude are required' });
+        }
 
+        const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+        const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=5000&type=cafe&key=${apiKey}`;
+
+        const response = await fetch(url);
         if (!response.ok) {
             console.error(`Error ${response.status} - ${response.statusText}`);
-            return res.status(response.status).json({error: 'Error retrieving map data, check network or API key!'});
+            return res.status(response.status).json({ error: 'Error retrieving map data, check network or API key!' });
         }
 
         const data = await response.json();
@@ -27,14 +36,21 @@ const searchCafes = async (req, res) => {
     try {
         const token = Auth.getToken(req);
         if (!token) {
-            return res.status(401).json({error: 'No authentication token found' });
+            return res.status(401).json({ error: 'No authentication token found' });
         }
 
-        const response = await fetch('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=latitude,longitude&radius=5000&type=cafe&key=YOUR_GOOGLE_API_KEY');
+        const { latitude, longitude } = req.query;
+        if (!latitude || !longitude) {
+            return res.status(400).json({ error: 'Latitude and longitude are required' });
+        }
 
-        if(!response.ok) {
+        const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+        const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=5000&type=cafe&key=${apiKey}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
             console.error(`Error ${response.status} - ${response.statusText}`);
-            return res.status(response.status).json({error: 'Error retrieving cafe data'});
+            return res.status(response.status).json({ error: 'Error retrieving cafe data' });
         }
 
         const data = await response.json();
@@ -45,37 +61,30 @@ const searchCafes = async (req, res) => {
     }
 };
 
-const postCafes = async(req, res) => {
+const postCafes = async (req, res) => {
     try {
         const token = Auth.getToken(req);
-        if(!token) {
+        if (!token) {
             return res.status(401).json({ error: 'No authentication token found' });
-        } 
-
-        const cafeData = req.body;
-        if(!cafeData) {
-            return res.status(400).json({ error: 'Cafe data is required' });
         }
 
-        return res.status(201).json({message: 'Cafe data posted successfully', data: cafeData });
+        const cafeData = req.body;
+        if (!cafeData || !cafeData.name || !cafeData.address) {
+            return res.status(400).json({ error: 'Cafe name and address are required' });
+        }
+
+       
+        const newCafe = await Cafe.create(cafeData);
+
+        return res.status(201).json({ message: 'Cafe data posted successfully', data: newCafe });
     } catch (err) {
         console.error('Error posting cafe data', err);
         return res.status(500).json({ error: 'Error posting cafe data' });
     }
-}
-            const newCafe = await Cafe.create(cafeData);
-            try {
-                res.json('INSERT INTO shops');
-            } catch (err) {
-                console.error('Error creating cafe', err);
-                return res.status(response.status).json({error: 'Error creating cafe data'});
-            };
+};
 
 module.exports = {
     retrievePlaces,
     searchCafes,
-    postCafes,
-    newCafe
+    postCafes
 };
-
-

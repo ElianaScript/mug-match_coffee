@@ -8,6 +8,7 @@ import CoffeeQuiz from './pages/CoffeeQuiz';
 import Navbar from './components/navbar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import MapComponent from './components/mapComponent';
 import './index.css';
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
             <Route path='/favorites' element={<Favorites />} />
             <Route path='/settings' element={<Settings />} />
             <Route path='/quiz' element={<CoffeeQuiz />} />
-            <Route path='/coffeeshops' element={<CoffeeShops />} />
+            <Route path='/shops' element={<CoffeeShops />} />
             <Route path='/signup' element={<SignUp />} />
             <Route path='/login' element={<Login />} />
     </Routes>
