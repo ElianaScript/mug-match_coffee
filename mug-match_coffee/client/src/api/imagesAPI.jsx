@@ -1,55 +1,18 @@
-import Auth from '../utils/auth';
-
-const API_URL = '/api/coffeePics';
-
-const retrieveCoffeePics = async () => {
-    try {
-        const response = await fetch (
-            '/api/coffeePics',
-            { 
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${Auth.getToken()}`
-                }
-            }
-        );
-        
-        if(!response.ok) {
-            throw new Error('Invalid API response, check network tab!');
-        }
-        const data = await response.json();
-        return data;
-    } catch (err) {
-        console.error('Error retrieving data', err);
-        return [];
+export const retrieveCoffeePics = async () => {
+  try {
+    const response = await fetch('https://coffee.alexflipnote.dev/coffee');
+    
+ 
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Response is not JSON');
     }
+
+    const data = await response.json();
+    console.log('Fetched Coffee Image:', data); 
+    return [data];
+  } catch (error) {
+    console.error('Error retrieving coffee image:', error);
+    return []; 
+  }
 };
-
-const postImage = async (body) => {
-    try {
-        const response = await fetch(
-            'api/coffeePics', {
-                method: 'POST', 
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${Auth.getToken()}`
-                },
-                body: JSON.stringify(body)
-            }
-
-        )
-        
-if(!response.ok) {
-throw new Error ('Invalid Api response, check network tab!');
-} 
-
-const data = response.json();
-return data;
-} catch (err) {
-console.error('Error posting images.', err) 
-
-return Promise.reject('Could not produce image');
-    }
-};
-
-export { retrieveCoffeePics, postImage };

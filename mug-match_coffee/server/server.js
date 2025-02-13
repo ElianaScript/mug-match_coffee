@@ -45,8 +45,10 @@ Preference.belongsTo(Profile, { foreignKey: 'user_id' });
 Coffee.hasMany(Preference, { foreignKey: 'coffee_id' });
 Preference.belongsTo(Coffee, { foreignKey: 'coffee_id' });
 
-app.use('/api/imagesAPI', homeRoute)
+app.use('/api', homeRoute)
 app.use('/api/mapAPI', shopRoute);
+
+
 
 sequelize.sync()
 .then(() => {

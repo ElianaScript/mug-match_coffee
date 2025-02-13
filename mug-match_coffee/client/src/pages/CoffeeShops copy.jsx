@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import GradientBackground from '../components/GradientBackground';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
-import { retrievePlaces, searchCafes, postCafes } from '../api/mapAPI';
+import { retrievePlaces } from '../api/mapAPI';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import '../index.css';
 
@@ -78,7 +78,7 @@ const CoffeeShops = () => {
                     ))}
                 </ul>
             ) : (
-                <p className="text-center text-gray-500">Loading coffee shops...</p>
+                <p className="text-center text-gray-500"></p>
             )}
 
             <LoadScript googleMapsApiKey={import.meta.env.VITE_TOKEN}>

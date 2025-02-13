@@ -1,43 +1,48 @@
-import Auth from '../utils/auth';
+const API_KEY = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
 
-const API_URL = 'https://www.google.com/maps/@35.021534,-80.688171,2845m/data=!3m1!1e3?entry=ttu&g_ep=EgoyMDI1MDIxMC4wIKXMDSoASAFQAw%3D%3D'
+const PLACES_API_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
 
-const fetchWithAuth = async (method, body = null) => {
+const fetchWithAuth = async (lat, lng) => {
     try {
-        const token = import.meta.env.VITE_TOKEN;
-        if (!token) {
-            throw new Error('No authentication token found');
+        if (!API_KEY) {
+            throw new Error('No Google Maps API key found');
         }
 
-        const headers = {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`, 
-        };
+        const url = `${PLACES_API_URL}?location=${lat},${lng}&radius=1500&type=cafe&key=${API_KEY}`;
+        
+        console.log("Fetching URL:", url); 
 
-        const response = await fetch(API_URL, {
-            method,
-            headers,
-            body: body ? JSON.stringify(body) : null,
-        });
+        const response = await fetch(url);
 
         if (!response.ok) {
-            if (response.status === 401) {
-                console.warn("Unauthorized request. Check if your token is valid.");
-                return null;
-            }
             console.error(`Error: ${response.status} - ${response.statusText}`);
             throw new Error(`Invalid map API response (Status: ${response.status})`);
         }
 
         return await response.json();
     } catch (err) {
-        console.error(`Error with ${method} request:`, err.message);
+        console.error(`Error fetching places:`, err.message);
         throw err; 
     }
 };
 
-const retrievePlaces = async () => fetchWithAuth('GET');
-const searchCafes = async () => fetchWithAuth('GET');
-const postCafes = async (cafeData) => fetchWithAuth('POST', cafeData);
+const retrievePlaces = async (lat, lng) => {
+    if (!lat || !lng) {
+        console.error("Latitude and Longitude are required.");
+        return;
+    }
+    return fetchWithAuth(lat, lng);
+};
 
-export { retrievePlaces, searchCafes, postCafes };
+navigator.geolocation.getCurrentPosition(
+    (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log("User's Location:", latitude, longitude);
+        retrievePlaces(latitude, longitude);
+    },
+    (error) => {
+        console.error("Geolocation error:", error.message);
+    }
+);
+
+export { retrievePlaces };

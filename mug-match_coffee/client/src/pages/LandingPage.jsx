@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import GradientBackground from '../components/GradientBackground';
 import Button from '../components/Button';
 import { useNavigate } from 'react-router-dom';
-import { retrieveCoffeePics } from '../api/imagesAPI'; 
+import { retrieveCoffeePics }from '../api/imagesAPI'; 
 
 
 const LandingPage = () => {
@@ -25,11 +25,11 @@ const LandingPage = () => {
   return (
     <GradientBackground>
       <div className="flex justify-center mt-6 space-x-6">
-        {coffeePics.length > 0 ? (
+        {coffeePics && coffeePics.length > 0 ? (
           coffeePics.map((pic, index) => (
             <img
               key={index}
-              src={pic.imageUrl}
+              src={pic.file}
               alt={`Coffee ${index + 1}`}
               className="w-40 h-40 object-cover rounded-lg shadow-lg"
             />
