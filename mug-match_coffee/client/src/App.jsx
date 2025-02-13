@@ -6,7 +6,7 @@ import Favorites from './pages/Favorites copy';
 import CoffeeShops from './pages/CoffeeShops copy';
 import Settings from './pages/ProfileSettings';
 import CoffeeQuiz from './pages/CoffeeQuiz';
-import Navbar from './components/navbar';
+import Navbar from './components/Navbar';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Map from './components/mapComponent';
