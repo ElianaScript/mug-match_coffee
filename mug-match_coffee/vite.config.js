@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  root: './',  
+  base: "/mug-match_coffee/",  
   build: {
     outDir: '../dist',
   },
