@@ -7,7 +7,7 @@ import CoffeeShops from './pages/CoffeeShops copy';
 import Settings from './pages/ProfileSettings';
 import CoffeeQuiz from './pages/CoffeeQuiz';
 import Navbar from './components/Navbar';
-import SignUp from './pages/SignUp';
+import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Map from './components/mapComponent';
 import Fact from './components/factComponent';
@@ -25,7 +25,7 @@ function App() {
             <Route path='/settings' element={<Settings />} />
             <Route path='/quiz' element={<CoffeeQuiz />} />
             <Route path='/shops' element={<CoffeeShops />} />
-            <Route path='/signup' element={<SignUp />} />
+            <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
             <Route path='/map' element={<Map />} />
     </Routes>
